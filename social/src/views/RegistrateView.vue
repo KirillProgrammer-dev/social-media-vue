@@ -52,13 +52,13 @@
                     >
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                                v-model="dateFormatted"
+                                v-model="date"
                                 label="Ваша дата рождения"
                                 hint="MM/DD/YYYY format"
                                 persistent-hint
-                                prepend-icon="mdi-calendar"
+                                prepend-inner-icon="mdi-calendar"
                                 v-bind="attrs"
-                                @blur="date = parseDate(dateFormatted)"
+                                @blur="date = parseDate(date)"
                                 v-on="on"
                                 outlined
                             ></v-text-field>
@@ -74,7 +74,7 @@
                     color="primary"
                     @click="e1 = 2"
                     >
-                    Continue
+                    Далее
                     </v-btn>
                 </v-stepper-content>
 
@@ -89,19 +89,24 @@
                         v-model="email"
                         outlined
                     ></v-text-field>
+                    <v-text-field
+                        label="Введите вашу страницу в соц сетях"
+                        v-model="site"
+                        outlined
+                    ></v-text-field>
 
                     <v-btn
                     color="primary"
                     @click="e1 = 3"
                     >
-                        Continue
+                        Далее
                     </v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="3">
                     <v-text-field
                         label="Введите имя пользователя"
-                        v-model="user"
+                        v-model="username"
                         outlined
                     ></v-text-field>
                     <v-text-field
@@ -110,22 +115,32 @@
                         outlined
                     ></v-text-field>
 
-                    <v-btn
-                    color="primary"
-                    @click="e1 = 1"
-                    >
-                        Continue
-                    </v-btn>
 
-
-                    <v-btn @click="registrate(name, lastname, password)">
+                    <v-btn @click="registrate(name, lastname, date, phone, email, site, username, password)"
+                    color="primary">
                         Регистрация
                     </v-btn>
                 </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
         </v-card>
-    </div>
+        <v-overlay
+            :z-index="1"
+            :value="overlay"
+            @click="overlay = !overlay"
+        >
+            <v-alert
+                :value="alert"
+                color="pink"
+                dark
+                border="top"
+                icon="mdi-home"
+                transition="scale-transition"
+            >
+                Пожалуйста заполните все обязательные поля в форме
+            </v-alert>
+        </v-overlay>
+        </div>
 </template>
 <script>
 export default {
@@ -134,19 +149,63 @@ export default {
         name: null,
         lastname: null,
         password: null,
+        site: null,
+        email: null, 
+        phone: null, 
+        date: null,
+        username: null, 
+        menu: null,
         e1: 1,
+        ok: true,
+        step_error: 0,
+        overlay: 0,
+        alert: 1,
     }),
     methods: {
-        registrate(name, lastname, password){
-            this.axios.post("https://61f414d810f0f7001768c7e8.mockapi.io/api/social/users", {
-                name: name,
-                lastname: lastname,
-                password: password,
-            }).then(r => {
-                this.$router.push("/");
-                r
-            });
+        registrate(name, lastname, date, phone, email, site, username, password){
+            if (name != null && lastname != null && date != null && phone != null && email != null && username != null && password != null){
+                this.axios.post("https://61f414d810f0f7001768c7e8.mockapi.io/api/social/users", {
+                    name: name,
+                    lastname: lastname,
+                    date: date,
+                    tel: phone,
+                    email: email,
+                    website: site,
+                    username: username,
+                    password: password,
+                }).then(r => {
+                    this.$router.push("/");
+                    r
+                });
+            }
+            else{
+                if (name == null || lastname == 0 || date == null){
+                    this.step_error = 1
+                }
+                else if (phone == null || email == null){
+                    this.step_error = 2;
+                }
+                else if (username == null || password == null){
+                    this.step_error = 3;
+                }
+                this.ok = false;
+            }
+        }
+    },
+    watch:{
+        ok(){
+            if (this.ok == false){
+                this.overlay = !this.overlay;
+                this.e1 = this.step_error;
+                this.ok = !this.ok;
+            }
         }
     }
 }
 </script>
+<style>
+.v-overlay__content {
+    display: flex;
+    justify-content: center;
+}
+</style>
