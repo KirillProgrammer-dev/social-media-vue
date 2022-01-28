@@ -8,7 +8,8 @@
       style="margin:1em"
       outlined
       width="250"
-      shaped>
+      shaped
+      :to="'/profile/' + user.id">
           <v-img
             height="250"
             :src="'https://randomuser.me/api/portraits/' + (getRandomInt(0, 2) ? 'men' : 'women') + '/' + getRandomInt(0, 100) + '.jpg'"

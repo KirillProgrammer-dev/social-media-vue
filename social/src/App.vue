@@ -28,25 +28,25 @@
             <v-list-item-icon>
               <v-icon> mdi-home-outline </v-icon>
             </v-list-item-icon>
-            <v-list-content>
+            <v-list-item-content>
               <v-list-item-title class="text-left">Главная</v-list-item-title>
-            </v-list-content>
+            </v-list-item-content>
           </v-list-item>
-           <v-list-item :to="'/profile'">
+           <v-list-item :to="'/profile/2'">
             <v-list-item-icon>
               <v-icon> mdi-account-outline </v-icon>
             </v-list-item-icon>
-            <v-list-content>
+            <v-list-item-content>
               <v-list-item-title class="text-left">Мой профиль</v-list-item-title>
-            </v-list-content>
+            </v-list-item-content>
           </v-list-item>
            <v-list-item :to="'/search'">
             <v-list-item-icon>
               <v-icon> mdi-account-multiple-plus-outline </v-icon>
             </v-list-item-icon>
-            <v-list-content>
+            <v-list-item-content>
               <v-list-item-title class="text-left">Найти друзей</v-list-item-title>
-            </v-list-content>
+            </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
