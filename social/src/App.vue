@@ -19,7 +19,7 @@
               <img src="https://pixabay.com/get/ge26080380786fee529d289673c2470926cf70639430a5a94c262d0748a830e68779650c3b2c0d790c09ca3f773e22132_1280.jpg">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title class="font-weight-black">Кенигсберг Кирилл</v-list-item-title>
+              <v-list-item-title class="font-weight-black">{{ getName }}</v-list-item-title>
               <v-list-item-subtitle>14 лет</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -53,12 +53,27 @@
     
     <v-main class="px-12 py-3">
       <v-container fluid>
-        <router-view/>
+        <router-view @login="login" />
       </v-container>
     </v-main>
 
   </v-app>
 </template>
+<script>
+export default {
+  methods:{
+    login(login){ //временно на клиенте, потом сделаю на сервере с сесиями 
+      localStorage.setItem('name', login.name);
+      localStorage.setItem('lastname', login.lastname);
+    }
+  },
+    computed:{
+        getName(){
+            return localStorage.getItem("lastname") + " " + localStorage.getItem("name");
+        }
+    }
+}
+</script>
 
 <style>
 
